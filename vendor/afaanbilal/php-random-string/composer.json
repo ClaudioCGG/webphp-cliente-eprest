@@ -1,0 +1,24 @@
+{
+    "name": "afaanbilal/php-random-string",
+    "description": "Generate a random string of variable length from a given charset",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Afaan Bilal",
+            "email": "afaanbilal@gmail.com",
+            "homepage": "https://afaan.dev"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "AfaanBilal\\RandomString\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}

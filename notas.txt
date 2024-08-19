@@ -1,0 +1,213 @@
+CREATE DATABASE proyecto1
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+
+CREATE TABLE `users` (
+    `id` INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(200) DEFAULT NULL,
+    `email` VARCHAR(200) UNIQUE DEFAULT NULL,
+    `sector` VARCHAR(200) DEFAULT NULL,
+    `password` VARCHAR(255) DEFAULT NULL,
+    `token` VARCHAR(255) DEFAULT NULL,
+    `mail_verified` TINYINT(1) DEFAULT NULL,
+    `creation` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+/* EJEMPLO DE ARRAY Y RECORRIDA POR VALORES
+
+$mascotas=["primera"=>"rayita","segunda"=>"misha","tercera"=>"proximamente"];
+
+foreach ($mascotas as $clave => $valor) {
+    echo "Clave: $clave, Valor: $valor<br />";
+} */
+
+
+**** Recomendación require vs include ****
+Para desarrollo: Usa include cuando el archivo es opcional y require cuando el archivo es esencial. Deja activadas las alertas y warnings para identificar problemas durante el desarrollo.
+Para producción: Usa require para archivos críticos y asegúrate de que la configuración de PHP no muestre errores o warnings al usuario. Implementa un buen manejo de errores y asegúrate de que los errores se registren adecuadamente para que puedas revisarlos más tarde sin comprometer la seguridad de la aplicación.
+Si decides utilizar include, también puedes manejar los errores de manera más controlada utilizando file_exists o is_readable para verificar la existencia del archivo antes de incluirlo:
+
+php
+Copiar código
+if (file_exists('./components/header-inicio.php')) {
+    include './components/header-inicio.php';
+} else {
+    // Manejo del error: archivo no encontrado
+}
+
+
+*** Funciones Fundamentales en PHP ***
+echo():
+
+Propósito: Imprime uno o más strings en la salida estándar (generalmente el navegador).
+Uso: echo "Hello, world!";
+print():
+
+Propósito: Imprime un string en la salida estándar. Similar a echo, pero devuelve 1, por lo que puede ser usado en expresiones.
+Uso: print "Hello, world!";
+var_dump():
+
+Propósito: Muestra la información estructural de una variable, incluyendo tipo y valor.
+Uso: var_dump($variable);
+isset():
+
+Propósito: Determina si una variable está definida y no es null.
+Uso: isset($variable);
+unset():
+
+Propósito: Destruye una variable específica.
+Uso: unset($variable);
+empty():
+
+Propósito: Verifica si una variable está vacía (es decir, no está definida, es null, o tiene un valor que PHP considera vacío).
+Uso: empty($variable);
+strlen():
+
+Propósito: Devuelve la longitud de una cadena de texto.
+Uso: strlen("Hello");
+str_replace():
+
+Propósito: Reemplaza todas las apariciones de una subcadena en una cadena.
+Uso: str_replace("world", "PHP", "Hello world");
+strpos():
+
+Propósito: Encuentra la posición de la primera aparición de una subcadena dentro de una cadena.
+Uso: strpos("Hello world", "world");
+date():
+
+Propósito: Formatea una fecha/hora local.
+Uso: date("Y-m-d H:i:s");
+file_get_contents():
+
+Propósito: Lee el contenido de un archivo en una cadena.
+Uso: file_get_contents("file.txt");
+file_put_contents():
+
+Propósito: Escribe datos en un archivo.
+Uso: file_put_contents("file.txt", "Hello, world!");
+header():
+
+Propósito: Envía encabezados HTTP al navegador.
+Uso: header("Location: /index.php");
+session_start():
+
+Propósito: Inicia una nueva sesión o reanuda una sesión existente.
+Uso: session_start();
+session_destroy():
+
+Propósito: Destruye todos los datos de sesión.
+Uso: session_destroy();
+mysqli_connect():
+
+Propósito: Establece una conexión a una base de datos MySQL.
+Uso: $con = mysqli_connect("localhost", "user", "password", "database");
+mysqli_query():
+
+Propósito: Ejecuta una consulta en una base de datos MySQL.
+Uso: mysqli_query($con, "SELECT * FROM table");
+mysqli_close():
+
+Propósito: Cierra una conexión a la base de datos MySQL.
+Uso: mysqli_close($con);
+Superglobales Principales en PHP
+$_GET:
+
+Propósito: Contiene datos enviados a través del método GET en una solicitud HTTP.
+Uso: $_GET['parametro'];
+$_POST:
+
+Propósito: Contiene datos enviados a través del método POST en una solicitud HTTP.
+Uso: $_POST['parametro'];
+$_REQUEST:
+
+Propósito: Contiene datos enviados a través de métodos GET, POST, y COOKIE.
+Uso: $_REQUEST['parametro'];
+$_SESSION:
+
+Propósito: Contiene datos de la sesión del usuario.
+Uso: $_SESSION['key'];
+$_COOKIE:
+
+Propósito: Contiene datos de cookies enviadas al navegador.
+Uso: $_COOKIE['cookie_name'];
+$_SERVER:
+
+Propósito: Contiene información sobre el entorno del servidor y la solicitud actual.
+Uso: $_SERVER['SCRIPT_NAME'];
+$_FILES:
+
+Propósito: Contiene información sobre archivos subidos a través de un formulario.
+Uso: $_FILES['file']['name'];
+$_ENV:
+
+Propósito: Contiene variables de entorno del sistema.
+Uso: $_ENV['VARIABLE'];
+$_GLOBALS:
+
+Propósito: Contiene todas las variables globales disponibles en el script.
+Uso: $_GLOBALS['variable_name'];
+$GLOBALS:
+
+Propósito: Contiene todas las variables globales del script en ejecución.
+Uso: $GLOBALS['variable_name'];
+Estos son algunos ejemplos de funciones y superglobales que se utilizan comúnmente en PHP para tareas básicas y avanzadas. Si tienes alguna pregunta adicional o necesitas más detalles sobre alguna de estas funciones, ¡déjame saber!
+
+
+*** Funciones para el Manejo de Sesiones en PHP ***
+session_start():
+
+Propósito: Inicia una nueva sesión o reanuda una sesión existente.
+Uso: session_start();
+session_destroy():
+
+Propósito: Destruye todos los datos asociados con la sesión actual.
+Uso: session_destroy();
+Nota: Esto no elimina automáticamente las cookies de sesión.
+session_unset():
+
+Propósito: Elimina todas las variables de sesión actuales.
+Uso: session_unset();
+session_regenerate_id():
+
+Propósito: Regenera el ID de sesión actual para evitar ataques de fijación de sesión. Se recomienda usar esta función después de iniciar sesión.
+Uso: session_regenerate_id();
+Parámetros Opcionales: Puedes pasar true como parámetro para eliminar el antiguo ID de sesión.
+session_id():
+
+Propósito: Obtiene o establece el ID de sesión actual.
+Uso: session_id(); para obtener el ID, o session_id('new_id'); para establecer un nuevo ID.
+session_name():
+
+Propósito: Obtiene o establece el nombre de la sesión.
+Uso: session_name(); para obtener el nombre, o session_name('new_name'); para establecer un nuevo nombre.
+session_save_path():
+
+Propósito: Obtiene o establece la ruta donde se guardan los archivos de sesión.
+Uso: session_save_path(); para obtener la ruta, o session_save_path('/new/path'); para establecer una nueva ruta.
+session_get_cookie_params():
+
+Propósito: Obtiene los parámetros de la cookie de sesión.
+Uso: session_get_cookie_params();
+session_set_cookie_params():
+
+Propósito: Establece los parámetros para la cookie de sesión.
+Uso: session_set_cookie_params($lifetime, $path, $domain, $secure, $httponly);
+Parámetros:
+$lifetime (int): Tiempo de vida de la cookie en segundos.
+$path (string): Ruta en la que la cookie está disponible.
+$domain (string): Dominio en el que la cookie está disponible.
+$secure (bool): Si es true, la cookie solo se enviará a través de HTTPS.
+$httponly (bool): Si es true, la cookie solo es accesible a través del protocolo HTTP y no JavaScript.
+session_cache_expire():
+
+Propósito: Obtiene o establece el tiempo de vida del caché de sesión.
+Uso: session_cache_expire(); para obtener el valor actual, o session_cache_expire(30); para establecerlo a 30 minutos.
+session_cache_limiter():
+
+Propósito: Obtiene o establece el limitador de caché de sesión.
+Uso: session_cache_limiter(); para obtener el valor actual, o session_cache_limiter('private_no_expire'); para establecerlo.
+
+https://www.php.net/manual/es/book.session.php
+

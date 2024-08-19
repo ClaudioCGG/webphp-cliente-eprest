@@ -1,0 +1,23 @@
+{
+  "name": "claud/proyecto1",
+  "description": "sistema login php y crud",
+  "type": "project",
+  "license": "GPLv3",
+  "autoload": {
+    "psr-4": {
+      "Claud\\Proyecto1\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "ClaudioCGG cguirado.ln"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "phpmailer/phpmailer": "^6.9",
+    "ext-pdo": "*",
+    "afaanbilal/php-random-string": "^0.1.0",
+    "vlucas/phpdotenv": "^5.6"
+  }
+}
