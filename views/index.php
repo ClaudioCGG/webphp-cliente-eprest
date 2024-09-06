@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+//La función isset() en PHP se utiliza para verificar si una variable está definida y no es null.
+
 if (!isset($_SESSION['user'])) {
     header("Location: ./login.php");
     exit(); // Asegúrate de usar exit después de redirigir para evitar que el script continúe ejecutándose.

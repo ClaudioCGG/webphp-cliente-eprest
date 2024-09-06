@@ -211,3 +211,17 @@ Uso: session_cache_limiter(); para obtener el valor actual, o session_cache_limi
 
 https://www.php.net/manual/es/book.session.php
 
+
+
+Recursos utilizados:
+
+
+afaanbilal/php-random-string: https://packagist.org/packages/afaanbilal/php-random-string
+
+PHPMailer: composer install phpmailer/phpmailer
+
+https://symfony.com/download
+
+
+
+

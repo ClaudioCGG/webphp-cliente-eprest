@@ -16,19 +16,12 @@
 <body class="d-flex text-center text-white bg-dark" style="height: 100vh;">
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-
-    <?php include './components/header-inicio.php'; ?>
-
-    <main class="px-3">
-
-        <h1>Verifique su correo electrónico</h1>
-
-        <p>Parece que su cuenta aun no se encuentra verificada. Por favor, revise su correo,
-            y no olvide ingresar a su carpeta de spam, para buscar el correo de verificación,
-            antes de continuar utilizando la plataforma.</p>
-    </main>
-
-</div>
+        <?php include './components/header-inicio.php'; ?>
+        <main class="px-3">
+            <h1>Verifique su correo electrónico</h1>
+            <p>Parece que su cuenta aún no se encuentra verificada. Por favor, revise su correo, y no olvide ingresar a su carpeta de spam, para buscar el correo de verificación, antes de continuar utilizando la plataforma.</p>
+        </main>
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>

@@ -1,13 +1,16 @@
 <?php
 namespace controllers;
 
-require '../src/models/User.php';
-require 'Connection.php';
+require '../models/User.php';
+require '../controllers/Connection.php';
 
 use controllers\Connection;
 use models\User;
 
+
+
 class DashboardControlle {
+    
     public static function perfil() {
         $connection = new Connection();
         return User::usersDetail($connection, $_SESSION['user']);
@@ -20,6 +23,8 @@ class DashboardControlle {
             'Graphic Design',
             'Marketing'
         );
+        $clave_a_borrar = array_search($sector, $sectores);
+        unset($sectores[$clave_a_borrar]);
         return $sectores;
     }
 

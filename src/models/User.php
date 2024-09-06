@@ -22,56 +22,42 @@ class User extends Model {
         $this->token = (new \AfaanBilal\RandomString\RandomString(20))->generate();
         $this->mail_verified = false;
         $this->creation = null;
-
     }
 
-    public function save(Connection $connection) {
-        $con = $connection->get_connection();
+        public function save(Connection $connection) {
+            $con = $connection->get_connection();
 
-        $stmt = $con->prepare(
-            "INSERT INTO users (name, email, password, sector, token, mail_verified, creation)
-            VALUES (:name, :email, :password, :sector, :token, :mail_verified,now())"
-        );
+            $stmt = $con->prepare("INSERT INTO users (name, email, password, sector, token, mail_verified, creation) VALUES (?, ?, ?, ?, ?, ?, NOW())");
 
-        $stmt->bindParam(":name", $this->name);
-        $stmt->bindParam(":email", $this->email);
-        $stmt->bindParam(":password", $this->password);
-        $stmt->bindParam(":sector", $this->sector);
-        $stmt->bindParam(":token", $this->token);
-        $stmt->bindParam(":mail_verified", $this->mail_verified);
-
-        // No necesitas un marcador de posición para :creation ya que la fecha y hora actuales
-        // se insertarán directamente mediante la función NOW() en la consulta SQL.
-        // $stmt->bindParam(":creation", $this->creation);
-
-        $stmt->execute();
-    }
-
-    public static function login(Connection $connection, $email, $password) {
-        $con = $connection->get_connection();
-
-        $stmt = $con->prepare("SELECT email, password FROM users WHERE email = ?");
-        $stmt->execute(array($email));
-        $user = $stmt->fetch();
-
-        if ($user && password_verify($password, $user['password'])) {
-            return true;
+            $stmt->execute([$this->name, $this->email, $this->password, $this->sector, $this->token, $this->mail_verified]);
         }
-        return false;
+
+    public static function usersDetail(Connection $connection, string $email) {
+        $con = $connection->get_connection();
+        $stmt = $con->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute(array($email));
+        return $stmt->fetch();
     }
 
-    public static function validate($name, $email, $password, $sector) {
-        if ($name == null || $email == null || $password == null || $sector == null) {
+    public static function validate($name, $mail, $password, $sector) {
+        if($name == null || $mail == null || $password == null || $sector == null)
+        {
             return false;
         }
         return true;
     }
 
-    public static function usersDetail(Connection $connection, string $email) {
+    public static function login(Connection $connection, $email, $password) {
         $con = $connection->get_connection();
-        $stmt = $con->prepare("SELECT * FROM users WHERE email= ?");
+
+        $stmt = $con->prepare("SELECT email, password, mail_verified FROM users WHERE email = ?");
         $stmt->execute(array($email));
-        return $stmt->fetch();
+        $user = $stmt->fetch();
+
+        if ($user && $user['mail_verified'] && password_verify($password, $user['password'])) {
+            return true;
+        }
+        return false;
     }
 
     public static function actualizar(Connection $connection, $name, $email, $sector, $id) {
@@ -82,10 +68,7 @@ class User extends Model {
         $sector = self::escapeData($sector);
         $id = self::escapeData($id);
 
-
-        $stmt = $con->prepare(
-            "UPDATE users SET name=:name, email=:email, sector=:sector WHERE id=:id"
-        );
+        $stmt = $con->prepare("UPDATE users SET name = :name, email = :email, sector = :sector WHERE id = :id");
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':sector', $sector, PDO::PARAM_STR);
@@ -94,10 +77,24 @@ class User extends Model {
         return $stmt->execute();
     }
 
-    public function getToken(){
-        return    $this->token;
+    public static function verifyEmail(Connection $connection, $token)
+    {
+        $con = $connection->get_connection();
+        $stmt = $con->prepare("UPDATE users SET mail_verified=1 WHERE token=:token");
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $con = $connection->get_connection();
+        $stmt = $con->prepare("SELECT email FROM users WHERE token= ?");
+        $stmt->execute(array($token));
+
+        return $stmt->fetch();
     }
 
+
+    public function getToken(){
+        return $this->token;
+    }
 }
 
 ?>

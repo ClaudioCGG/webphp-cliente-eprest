@@ -1,14 +1,18 @@
 <?php
+
 namespace controllers;
 
 use PDO;
 use PDOException;
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv-> load();
+// Cargar las variables de entorno
 
-require_once __DIR__ . '/vendor/autoload.php';
+require 'C:\wamp64\www\proyecto1\vendor\autoload.php';
+
+
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
 
 class Connection {
     protected $connection;
@@ -24,7 +28,9 @@ class Connection {
             $this->connection = new PDO("mysql:host=$this->servername;dbname=proyecto1", $this->username, $this->password);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
+            // Considera registrar el error en lugar de mostrarlo
+            error_log("Connection failed: " . $e->getMessage());
+            echo "Connection failed. Please contact the administrator.";
         }
     }
 
@@ -33,6 +39,6 @@ class Connection {
     }
 
     public function close_connection() {
-         $this->connection = null;
+        $this->connection = null;
     }
 }

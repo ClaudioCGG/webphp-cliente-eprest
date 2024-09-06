@@ -1,37 +1,45 @@
 <?php
 
 
-namespace Controller;
+namespace controllers;
 
+use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+require_once __DIR__ . '/../../vendor/phpmailer/phpmailer/src/Exception.php';
+require_once __DIR__ . '/../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require_once __DIR__ . '/../../vendor/phpmailer/phpmailer/src/SMTP.php';
+require 'C:\wamp64\www\proyecto1\vendor\autoload.php';
+
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
 class MailerController
 {
-    protected $mail;
+    protected $email;
 
     public function __construct()
     {
-        $this->mail = new PHPMailer(true);
-        $this->mail->isSMTP();
-        $this->mail->SMTPAuth = true;
-        $this->mail->CharSet = "UTF-8";
-        $this->mail->Host = "smtp.gmail.com";
-        $this->mail->SMTPSecure = 'tsl'; //
-        $this->mail->Port = 587;
-        $this->mail->Username = "";
-        $this->mail->Password = "";
-        $this->mail->FromName = "Sistema de gestión";
-        $this->mail->From = "";
+        $this->email = new PHPMailer(true);
+        $this->email->isSMTP();
+        $this->email->SMTPAuth = true;
+        $this->email->CharSet = "UTF-8";
+        $this->email->Host = "smtp.gmail.com";
+        $this->email->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $this->email->Port = 587;
+        $this->email->Username = getenv('DB_MAIL_USER');
+        $this->email->Password = getenv('DB_MAIL_PASS');
+        $this->email->setFrom(getenv('DB_MAIL_USER'), "Sistema de gestión Maradey");
     }
 
     public function sendVerificationMail($to, $token)
     {
-        $this->mail->addAddress("", '');
-        $this->mail->addReplyTo("", '');
-        $this->mail->isHTML(true);
-        $this->mail->Subject = "";
-        $this->mail->Body = "
+        $this->email->addAddress($to);
+        $this->email->addReplyTo("");
+        $this->email->isHTML(true);
+        $this->email->Subject = "";
+        $this->email->Body = "
             <html>
                 <body style='text-align: center'>
                     <h1>Gracias por registrarte</h1>
@@ -47,10 +55,10 @@ class MailerController
             </html>
         ";
 
-        $this->mail->AltBody = "";
+        $this->email->AltBody = "";
 
         try{
-            $this->mail->send();
+            $this->email->send();
             return true;
         }
         catch (\Exception $e)

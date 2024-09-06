@@ -21,6 +21,7 @@ class ComposerStaticInitd27c72852b86e12e7307a3715b5b63ec
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'PhpOption\\' => 10,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
@@ -54,6 +55,10 @@ class ComposerStaticInitd27c72852b86e12e7307a3715b5b63ec
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/src',
         ),
         'PhpOption\\' => 
         array (
