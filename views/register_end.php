@@ -1,10 +1,10 @@
-    <?php
-    require_once '../src/controllers/Connection.php';
-    require_once '../src/models/User.php';
-    require_once '../src/controllers/VerifyMailController.php';
+<?php
+    require_once __DIR__ . '/../src/controllers/Connection.php';
+    require_once __DIR__ . '/../src/models/User.php';
+    require_once __DIR__ . '/../src/controllers/MailerController.php'; // Asegúrate que este archivo tiene el namespace correcto
 
     use controllers\Connection;
-    use controllers\VerifyMailController;
+    use controllers\MailerController;
     use models\User;
 
     $connection = new Connection();
@@ -13,27 +13,20 @@
     $password = $_POST['password'];
     $sector = User::escapeData($_POST['sector']);
 
+    if (User::validate($name, $email, $sector, $password)) {
+        $user = new User($name, $email, $sector, $password);
 
+        $user->save($connection);
 
+        $mailerController = new MailerController();
+        $mailerController->verificationMail($email, $user->getToken());
 
-
-    // Esta validacion no la puedo verificar  ya que los filtros previos limpian este tipo de errores.
-        if (!User::validate($name, $email, $sector, $password)) {
-            header("Location: ./register.php?errors=true");
-        
-
-        } else {
-            $user = new User($name, $email, $sector, $password);
-
-            if ($user->save($connection)) {
-
-                VerifyMailController::sendVerificationMail($email, $user->getToken());
-/*                 session_start();
-                $_SESSION['user'] = $mail; */
-                $connection->close_connection();
-                header('Location: ./email_not_verified.php');
-                exit(); // Es buena práctica incluir exit() después de una redirección
-            }
-
-
+        $connection->close_connection();
+        header('Location: ./email_not_verified.php');
+        exit();
+    } else {
+        header("Location: ./register.php?errors=true");
     }
+
+?>
+

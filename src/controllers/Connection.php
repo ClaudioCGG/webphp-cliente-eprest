@@ -8,10 +8,10 @@ use Dotenv\Dotenv;
 
 // Cargar las variables de entorno
 
-require 'C:\wamp64\www\proyecto1\vendor\autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv = Dotenv::createImmutable(__DIR__ .'/../../');
 $dotenv->load();
 
 class Connection {

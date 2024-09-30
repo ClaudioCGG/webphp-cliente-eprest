@@ -5,7 +5,9 @@
   "license": "GPLv3",
   "autoload": {
     "psr-4": {
-      "Claud\\Proyecto1\\": "src/"
+      "Claud\\Proyecto1\\": "src/",
+      "controllers\\": "src/controllers/",
+      "models\\": "src/models/"
     }
   },
   "authors": [

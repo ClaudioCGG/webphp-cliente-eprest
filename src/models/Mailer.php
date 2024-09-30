@@ -2,44 +2,49 @@
 
 namespace models;
 
-use controllers\Connection;
 use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . '/../../vendor/phpmailer/phpmailer/src/Exception.php';
 require_once __DIR__ . '/../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require_once __DIR__ . '/../../vendor/phpmailer/phpmailer/src/SMTP.php';
-require 'C:\wamp64\www\proyecto1\vendor\autoload.php'; // Cargar PHPMailer y otras librerías necesarias
+require_once __DIR__ . '/../../vendor/autoload.php'; // Cargar PHPMailer y otras librerías necesarias
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
 $dotenv->load();
 
 class Mailer {
-    protected $email;
+    protected $mail;
 
     public function __construct() {
 
-        $this->email = new PHPMailer(true);
-        $this->email->SMTPDebug = 0;
-        $this->email->isSMTP();
-        $this->email->SMTPAuth = true;
-        $this->email->CharSet = "UTF-8";
-        $this->email->Host = 'smtp.gmail.com';
-        $this->email->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $this->email->Port = 587;
-        $this->email->Username = getenv('DB_MAIL_USER');
-        $this->email->Password = getenv('DB_MAIL_PASS');
-        $this->email->setFrom(getenv('DB_MAIL_USER'), "Sistema de gestión Maradey");
+        // Configuración del servidor SMTP
+        $this->mail = new PHPMailer(true);
+        $this->mail->SMTPDebug = 0; // desactive la depuracion SMTP::DEBUG_SERVER
+        //$this->mail->SMTPDebug = SMTP::DEBUG_CONNECTION; // Muestra detalles de la conexión
+        //$this->mail->SMTPDebug = SMTP::DEBUG_LOWLEVEL;   // Muestra incluso los comandos y respuestas SMTP en detalle
+        $this->mail->isSMTP();
+        $this->mail->SMTPAuth = true;
+        $this->mail->CharSet = 'UTF-8';
+        $this->mail->Host = 'smtp.gmail.com';
+        $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $this->mail->Port = 587;
+        $this->mail->Username = $_ENV['DB_MAIL_USER'];
+        $this->mail->Password = $_ENV['DB_MAIL_PASS'];
+        $this->mail->setFrom($_ENV['DB_MAIL_USER'], 'SISTEMA DE GESTION DE CONSORCIO MARADEY');
+
     }
 
+    // Configuración para el envio de mail
     public function sendVerificationMail($to, $token) {
 
-        $this->email->addAddress($to);
-        $this->email->addReplyTo("", "No responder");
-        $this->email->isHTML(true);
-        $this->email->Subject = 'Validar registro, hacer click en el link adjunto...';
-        $this->email->Body = "
+        $this->mail->addAddress($to,'');
+        $this->mail->addReplyTo('cguirado.ln@gmail.com', 'No responder');
+        $this->mail->isHTML(true);
+        $this->mail->Subject = 'Validar registro, hacer click en el link adjunto...';
+        $this->mail->Body = "
             <html>
                 <head>
                     <meta charset='utf-8'>
@@ -55,15 +60,19 @@ class Mailer {
             </html>
         ";
 
-        $this->email->AltBody = 'Haz click en el siguiente enlace para activar tu cuenta: http://localhost/proyecto1/views/verifyAccount.php?token=' . $token;
+        $this->mail->AltBody = 'Haz click en el siguiente enlace para activar tu cuenta: http://localhost/proyecto1/views/verifyAccount.php?token=' . $token;
 
         try {
-            $this->email->send();
+            $this->mail->send();
             return true;
-        } catch (\Exception $e) {
-            error_log('PHPMailer Error: ' . $this->email->ErrorInfo, 3, "C:/wamp64/logs/php_error.log");
-            return $e->getMessage();
+        } catch (Exception $e) {
+    
+          return $e->getMessage();
         }
+
+
+
+
     }
 
 }

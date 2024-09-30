@@ -2,7 +2,7 @@
 namespace controllers;
 
 require '../models/User.php';
-require '../controllers/Connection.php';
+require 'Connection.php';
 
 use controllers\Connection;
 use models\User;
@@ -10,7 +10,7 @@ use models\User;
 
 
 class DashboardControlle {
-    
+
     public static function perfil() {
         $connection = new Connection();
         return User::usersDetail($connection, $_SESSION['user']);
